@@ -6,7 +6,7 @@ body {
 }
 
 button {
-    font-size: 10px;
+    font-size: 20px;
     text-align: center;
     font-family: sans-serif;
 }
@@ -15,4 +15,18 @@ label {
     font-size: 20px;
     text-align: center;
     font-family: sans-serif;
+}
+
+h1 {
+    font-family: sans-serif;
+}
+
+option{
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+input{
+    font-size: 1rem;
+    padding: 0.5rem;
 }
