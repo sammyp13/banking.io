@@ -6,6 +6,13 @@ body {
 }
 
 button {
+    font-size: 10px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+label {
     font-size: 20px;
     text-align: center;
+    font-family: sans-serif;
 }
