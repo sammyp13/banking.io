@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="./styles.css">
+  <meta charset="UTF-8">
+  <title>Transaction Calculator</title>
+</head>
+
+<body>
+  <div>
+    <label for="initial-amount">Initial Amount:</label>
+    <input type="number" id="initial-amount" />
+
+    <div id="transaction-list"></div>
+
+    <button id="add-transaction-btn">Add Transaction</button>
+    <button id="calculate-btn">Calculate</button>
+    <button id="reset-btn">Reset</button>
+  </div>
+
+  <script>
+    const transactionList = document.getElementById('transaction-list');
+    const addTransactionBtn = document.getElementById('add-transaction-btn');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const initialAmountInput = document.getElementById('initial-amount');
+
+    let transactions = [];
+
+    function renderTransaction(transaction) {
+      const transactionEl = document.createElement('div');
+      const typeSelect = document.createElement('select');
+      const depositOption = document.createElement('option');
+      depositOption.value = 'deposit';
+      depositOption.text = 'Deposit';
+      const withdrawalOption = document.createElement('option');
+      withdrawalOption.value = 'withdrawal';
+      withdrawalOption.text = 'Withdrawal';
+      typeSelect.appendChild(depositOption);
+      typeSelect.appendChild(withdrawalOption);
+      const valueInput = document.createElement('input');
+      valueInput.type = 'number';
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.addEventListener('click', () => {
+        transactions = transactions.filter(t => t !== transaction);
+        transactionEl.remove();
+      });
+      transactionEl.appendChild(typeSelect);
+      transactionEl.appendChild(valueInput);
+      transactionEl.appendChild(deleteBtn);
+      transactionList.appendChild(transactionEl);
+      return { typeSelect, valueInput };
+    }
+
+    addTransactionBtn.addEventListener('click', () => {
+      const transaction = {};
+      transaction.type = 'deposit';
+      const { typeSelect, valueInput } = renderTransaction(transaction);
+      transactions.push(transaction);
+      typeSelect.addEventListener('change', () => {
+        transaction.type = typeSelect.value;
+      });
+      valueInput.addEventListener('change', () => {
+        transaction.value = parseFloat(valueInput.value);
+      });
+    });
+
+    calculateBtn.addEventListener('click', () => {
+      const initialAmount = parseFloat(initialAmountInput.value);
+      if (isNaN(initialAmount)) {
+        alert('Initial amount must be a number');
+        return;
+      }
+      let total = initialAmount;
+      for (const transaction of transactions) {
+        if (!transaction.type || isNaN(transaction.value)) {
+          alert('All transactions must have a type and a value');
+          return;
+        }
+        if (transaction.type === 'deposit') {
+          total += transaction.value;
+        } else if (transaction.type === 'withdrawal') {
+          total -= transaction.value;
+        }
+      }
+      const totalEl = document.createElement('div');
+      totalEl.textContent = `Total: ${total.toFixed(2)}`;
+      if (total >= 0) {
+        totalEl.style.color = 'green';
+      } else {
+        totalEl.style.color = 'red';
+      }
+      transactionList.appendChild(totalEl);
+    });
+
+
+    resetBtn.addEventListener('click', () => {
+      transactions = [];
+      transactionList.innerHTML = '';
+      initialAmountInput.value = '';
+    });
+  </script>
+</body>
+
+</html>
